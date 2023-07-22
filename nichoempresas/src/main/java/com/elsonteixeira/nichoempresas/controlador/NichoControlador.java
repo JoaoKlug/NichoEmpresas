@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.elsonteixeira.nichoempresas.controlador.csv.CnaeDescricoesCsv;
+import com.elsonteixeira.nichoempresas.controlador.csv.EmpresasCsv;
+import com.elsonteixeira.nichoempresas.controlador.csv.MatrizesCsv;
+import com.elsonteixeira.nichoempresas.controlador.csv.MunicipiosCsv;
+import com.elsonteixeira.nichoempresas.controlador.csv.SociosCsv;
 import com.elsonteixeira.nichoempresas.controlador.diretorios.Diretorios;
-import com.elsonteixeira.nichoempresas.csv.CnaeDescricoesCsv;
-import com.elsonteixeira.nichoempresas.csv.EmpresasCsv;
-import com.elsonteixeira.nichoempresas.csv.MatrizesCsv;
-import com.elsonteixeira.nichoempresas.csv.MunicipiosCsv;
-import com.elsonteixeira.nichoempresas.csv.SociosCsv;
 import com.elsonteixeira.nichoempresas.entidades.Empresa;
 import com.elsonteixeira.nichoempresas.entidades.FaixaEtaria;
 import com.elsonteixeira.nichoempresas.entidades.Matriz;
@@ -23,31 +25,26 @@ import com.elsonteixeira.nichoempresas.repositorios.NichoRepositorio;
 public class NichoControlador extends Diretorios{
 
 	private List<Integer> cnpjs;
+	
+	@Autowired
 	private NichoRepositorio nichoRepositorio;
 	
-	public NichoControlador(String endereco, NichoRepositorio nichoRepositorio){
+	public NichoControlador(String endereco){
 
 		super(endereco);
-		this.nichoRepositorio = nichoRepositorio;
 		cnpjs = new ArrayList<Integer>();
 		
 	}
-	public boolean getDiretorioValido() {
-		return this.diretorioValido;
-	}
 	
-	public void executar() {
+	public void cadastrarNicho() {
 		
-		if(!empresaCsvDirs.isEmpty())
-		{
-			cadastrarEmpresa();
-			if(!matrizesCsvDirs.isEmpty() && !cnaeDescricoesDir.isEmpty() && !municipiosCsvDir.isEmpty())
-				cadastrarMatriz();
-			if(!sociosCsvDirs.isEmpty())
-				cadastrarSocio();
-			if(!tbNichoDir.isEmpty())
-			nichoRepositorio.exportarTbNicho(tbNichoDir);
-		}
+		cadastrarEmpresa();
+		if(!matrizesCsvDirs.isEmpty() && !cnaeDescricoesDir.isEmpty() && !municipiosCsvDir.isEmpty())
+			cadastrarMatriz();
+		if(!sociosCsvDirs.isEmpty())
+			cadastrarSocio();
+			
+		nichoRepositorio.exportarTbNicho(tbNichoDir);
 	}
 	
 	private void cadastrarEmpresa() {
@@ -61,7 +58,7 @@ public class NichoControlador extends Diretorios{
 			for(long j = 0; j < empresasCsv.getTotalLinhas(); j++ )
 			{
 				HashMap<String,String> dadosEmpresa = empresasCsv.getDadosEmpresa(j);
-				if(j%10000 == 0)
+				if(j%100000 == 0)
 				System.out.println("Linha atual: " + j);
 				if(!dadosEmpresa.isEmpty())
 				{

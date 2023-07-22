@@ -3,7 +3,6 @@ package com.elsonteixeira.nichoempresas.tela;
 import java.util.Scanner;
 
 import com.elsonteixeira.nichoempresas.controlador.NichoControlador;
-import com.elsonteixeira.nichoempresas.repositorios.NichoRepositorio;
 
 public class TelaPrincipal {
 	
@@ -13,21 +12,20 @@ public class TelaPrincipal {
 		lerTeclado = new Scanner(System.in);
 	}
 	
-	public void executar(NichoRepositorio nichoRepositorio){
+	public void executar(){
 		
-		NichoControlador nichoControlador = null;
-		String enderecoDiretorio = "";
-		boolean diretorioValido = false;
-		
-		while(diretorioValido != true)
+		for(;;)
 		{
 			System.out.println("Insira o endereço do diretorio que contém os arquivos CSV soltos");
-				enderecoDiretorio = lerTeclado.nextLine();
-			 nichoControlador = new NichoControlador(enderecoDiretorio, nichoRepositorio);
-			 diretorioValido = nichoControlador.getDiretorioValido();
+				String enderecoDiretorio = lerTeclado.nextLine();
+				
+			 NichoControlador nichoControlador = new NichoControlador(enderecoDiretorio);
+			 if(nichoControlador.isDiretorioValido()) {
+				 nichoControlador.cadastrarNicho();
+				 break;
+			 }
 		}
 		
-		nichoControlador.executar();
 	}
 	
 }

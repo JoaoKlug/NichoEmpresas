@@ -1,0 +1,1 @@
+Java -jar nichoempresas\target\nichoempresas-0.0.1-SNAPSHOT.jar

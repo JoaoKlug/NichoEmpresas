@@ -1,6 +1,7 @@
 package com.elsonteixeira.nichoempresas.repositorios;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +10,7 @@ import com.elsonteixeira.nichoempresas.entidades.Matriz;
 import com.elsonteixeira.nichoempresas.entidades.Socio;
 
 @Repository
-public class NichoRepositorioJDBC implements NichoRepositorio{
+public class NichoRepositorioJDBC implements NichoRepositorio, CommandLineRunner{
 
 	@Autowired
 	private JdbcTemplate jdbcRepositorio;
@@ -62,6 +63,12 @@ public class NichoRepositorioJDBC implements NichoRepositorio{
 		String sqlQuery = NichoQuery.EXPORTAR_TBNICHO;
 		System.out.println(endereco);
 		jdbcRepositorio.update(sqlQuery, endereco);
+		
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		
 		
 	}
 

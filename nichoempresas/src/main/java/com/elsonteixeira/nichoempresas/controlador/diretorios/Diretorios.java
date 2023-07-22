@@ -3,6 +3,7 @@ package com.elsonteixeira.nichoempresas.controlador.diretorios;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,23 +34,30 @@ public abstract class Diretorios {
 		
 	public Diretorios(String endereco) {
 		
-		this.diretorioValido = Files.exists(Path.of(endereco));
-		
-		if(diretorioValido) 
-		{
-			this.tbNichoDir = setTbNichoDir(endereco);
+		try{
+			diretorioValido = Files.exists(Path.of(endereco));
+			
+			tbNichoDir = setTbNichoDir(endereco);
 			if(!tbNichoDir.isEmpty())
 			{
-				this.empresaCsvDirs = setDirsList(endereco,EMPRESA_TIPO_ARQUIVO);
-				this.matrizesCsvDirs = setDirsList(endereco,MATRIZ_TIPO_ARQUIVO);
-				this.sociosCsvDirs = setDirsList(endereco,SOCIO_TIPO_ARQUIVO);
-				this.cnaeDescricoesDir = setDirs(CNAE_NOME_ARQUIVO);
-				this.municipiosCsvDir = setDirs(MUNICIPIO_NOME_ARQUIVO);
+				empresaCsvDirs = setDirsList(endereco,EMPRESA_TIPO_ARQUIVO);
+				if(!empresaCsvDirs.isEmpty())
+				{
+					matrizesCsvDirs = setDirsList(endereco,MATRIZ_TIPO_ARQUIVO);
+					sociosCsvDirs = setDirsList(endereco,SOCIO_TIPO_ARQUIVO);
+					cnaeDescricoesDir = setDirs(CNAE_NOME_ARQUIVO);
+					municipiosCsvDir = setDirs(MUNICIPIO_NOME_ARQUIVO);
+				}
+				else
+					diretorioValido = false;
 			}
+			else
+				diretorioValido = false;
+			
+		}catch(InvalidPathException ex) {
+			System.out.println("Caracter invalido: " + endereco.charAt(ex.getIndex()));
+			diretorioValido = false;
 		}
-		else
-			System.out.println(endereco + " não encontrado");
-		
 	}
 	
 	private String setTbNichoDir(String endereco)
@@ -94,4 +102,9 @@ public abstract class Diretorios {
 		}
 		return endereco;
 	}
+
+	public boolean isDiretorioValido() {
+		return diretorioValido;
+	}
+	
 }

@@ -4,7 +4,7 @@ import com.elsonteixeira.nichoempresas.entidades.Empresa;
 import com.elsonteixeira.nichoempresas.entidades.Matriz;
 import com.elsonteixeira.nichoempresas.entidades.Socio;
 
-public interface NichoRepositorio{
+public interface NichoRepositorio {
 
 	public void cadastrarEmpresa(Empresa empresa);
 	
